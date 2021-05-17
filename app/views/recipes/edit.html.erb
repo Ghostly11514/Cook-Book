@@ -1,0 +1,99 @@
+<div class="center-container">
+
+    <%= form_for :recipe, url: recipe_path(@recipe), html: {class: 'form shadow'}, method: :patch do |form| %>
+        <p class="title">Edit Recipe</p>
+        <%= form.label :name %>
+        <%= form.text_field :name %>
+
+        <%= form.label :p_time %>
+        <%= form.text_field :p_time %>
+
+        <%= form.label :c_time %>
+        <%= form.text_field :c_time %>
+
+        <% @ingredient = @recipe.ingredients.split(', '); %>
+        <% ingredientCount = 0; %>
+        <% for ingredients in @ingredient do %>
+            <%= form.label :ingredients, ('Ingredients ' + (ingredientCount + 1).to_s), {:id => ('I_label_' + (ingredientCount + 1).to_s), :for => ('recipe_Ingredient_' + (ingredientCount + 1).to_s)} %>
+            <%= form.text_field :ingredients, {:class => 'ingredient', :name => ('recipe[Ingredient_' + (ingredientCount + 1).to_s + ']'), :id => ('recipe_Ingredient_' + (ingredientCount + 1).to_s), :value => @ingredient[ingredientCount]} %>
+            <% ingredientCount += 1; %>
+        <% end %>
+
+        <% @step = @recipe.steps.split(', '); %>
+        <% stepCount = 0; %>
+        <% for step in @step do %>
+            <%= form.label :steps, ('Step ' + (stepCount + 1).to_s), {:id => ('S_label_' + (stepCount + 1).to_s), :for => ('recipe_Step_' + (stepCount + 1).to_s)} %>
+            <%= form.text_field :steps, {:class => 'step', :name => ('recipe[Step_' + (stepCount + 1).to_s + ']'), :id => ('recipe_Step_' + (stepCount + 1).to_s), :value => @step[stepCount]} %>
+            <% stepCount += 1; %>
+        <% end %>
+
+        <%= form.label :image %>
+        <% imgTag = ((@recipe.image.url).blank? ? "default.png" : @recipe.image.url); %>
+        <%= image_tag imgTag, class: "recipe-img" %>
+        <%= form.file_field :image %>
+
+        <div class="row">
+            <div class="column">
+                <div class="submit-container"><%= form.submit %></div>
+            </div>
+            <div class="column">
+                <%= link_to "Delete Recipe", recipe_path(@recipe), class: "deleteRecipe-button", method: :delete, data: {confirm: 'Are you sure you want to remove this recipe?'} %>
+            </div>
+        </div>
+    <% end %>
+
+</div>
+
+<script type="text/javascript">
+    var stepInputs = document.getElementsByClassName('step');
+    var stepNum = stepInputs.length;
+    var ingredientInputs = document.getElementsByClassName('ingredient');
+    var ingredientNum = ingredientInputs.length;
+
+    stepInputs[stepNum - 1].addEventListener('keypress', function removeListener(e) { e.currentTarget.removeEventListener(e.type, removeListener); addStep(); });
+    ingredientInputs[ingredientNum - 1].addEventListener('keypress', function removeListener(e) { e.currentTarget.removeEventListener(e.type, removeListener); addIngredient(); });
+
+    function insertAfter(referenceNode, newNode) {
+        referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+    }
+
+    function addStep() {
+        var stepQTY = document.getElementsByClassName('step').length;
+        var stepBefore = document.getElementById('recipe_Step_' + stepQTY);
+
+        var newLabel = document.createElement('label');
+        newLabel.setAttribute('for', 'recipe_Step_' + (stepQTY + 1));
+        newLabel.setAttribute('id', 'S_label_' + (stepQTY + 1))
+        newLabel.innerHTML = 'Step ' + (stepQTY + 1);
+        insertAfter(stepBefore, newLabel);
+        var stepLabel = document.getElementById('S_label_' + (stepQTY + 1));
+
+        var newStep = document.createElement('input');
+        newStep.setAttribute('type', 'text');
+        newStep.setAttribute('class', 'step')
+        newStep.setAttribute('name', 'recipe[Step_' + (stepQTY + 1) + ']');
+        newStep.setAttribute('id', 'recipe_Step_' + (stepQTY + 1));
+        newStep.addEventListener('keypress', function removeListener(e) { e.currentTarget.removeEventListener(e.type, removeListener); addStep(); });
+        insertAfter(stepLabel, newStep);
+    }
+
+    function addIngredient() {
+        var ingredientQTY = document.getElementsByClassName('ingredient').length;
+        var ingredientBefore = document.getElementById('recipe_Ingredient_' + ingredientQTY);
+
+        var newLabel = document.createElement('label');
+        newLabel.setAttribute('for', 'recipe_Ingredient_' + (ingredientQTY + 1));
+        newLabel.setAttribute('id', 'I_label_' + (ingredientQTY + 1))
+        newLabel.innerHTML = 'Ingredient ' + (ingredientQTY + 1);
+        insertAfter(ingredientBefore, newLabel);
+        var ingredientLabel = document.getElementById('I_label_' + (ingredientQTY + 1));
+
+        var newIngredient = document.createElement('input');
+        newIngredient.setAttribute('type', 'text');
+        newIngredient.setAttribute('class', 'ingredient')
+        newIngredient.setAttribute('name', 'recipe[Ingredient_' + (ingredientQTY + 1) + ']');
+        newIngredient.setAttribute('id', 'recipe_Ingredient_' + (ingredientQTY + 1));
+        newIngredient.addEventListener('keypress', function removeListener(e) { e.currentTarget.removeEventListener(e.type, removeListener); addIngredient(); });
+        insertAfter(ingredientLabel, newIngredient);
+    }
+</script>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cook Book</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <nav>
+        <div class="header shadow">
+            <div class="header-links">
+                <a style="font-weight: bold; font-size: 20px;" href="#" class="brand-logo">Digital Cook Book</a>
+            </div>
+            <div class="header-links">
+                <%= link_to "Home", home_path %>
+                <%= link_to "New Recipe", new_recipe_path %>
+            </div>
+        </div>
+    </nav>
+    <%= yield %>
+    <footer class="footer shadow">
+        <p>Digital Cook Book<br />
+        This web app is used to track your recipes. It was built using Ruby on Rails</p>
+    </footer>
+  </body>
+</html>

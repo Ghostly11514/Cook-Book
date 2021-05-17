@@ -1,0 +1,26 @@
+<div class="center-container">
+    <div class="recipe-container shadow">
+        <% imgTag = ((@recipe.image.url).blank? ? "default.png" : @recipe.image.url); %>
+        <div class="img-center"><%= image_tag imgTag, class: "recipe-img" %></div>
+        <p class="title"><%= @recipe.name %></p>
+        <p class="label">Prep Time: <span style="font-weight: normal;"><%= @recipe.p_time %></span></p>
+        <p class="label">Cook Time: <span style="font-weight: normal;"><%= @recipe.c_time %></span></p>
+
+        <p class="label">Ingredients:</p>
+        <ol class="recipe-list">
+            <% @ingredient = @recipe.ingredients.split(', ') %>
+            <% for ingredient in @ingredient do %>
+                <li><%= ingredient %></li>
+            <% end %>
+        </ol>
+
+        <p class="label">Steps:</p>
+        <ol class="recipe-list">
+            <% @step = @recipe.steps.split(', ') %>
+            <% for step in @step do %>
+                <li><%= step %></li>
+            <% end %>
+        </ol>
+        <div class="submit-container" id="edit-button"><%= link_to "Edit Recipe", edit_recipe_path(@recipe), class: "editRecipe-button" %></div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+<div class="content-container">
+
+    <%
+        numOfRows = ((@recipes.length / 3) + ((@recipes.length % 3).positive? ? 1 : 0));
+        rowCount = 0;
+        columnCount = 0;
+        iconCount = 0;
+    %>
+
+    <% if @recipes.length > 0 %>
+        <% until rowCount >= numOfRows %>
+            <div class="row">
+                <% until columnCount >= 3 %>
+                    <% if iconCount < @recipes.length %>
+                        <div class="column">
+                            <div class="recipe-icon shadow">
+                                <a href="/recipes/<%= @recipes[iconCount].id %>">
+                                    <div class="img-container">
+                                        <% imgTag = ((@recipes[iconCount].image.url).blank? ? "default.png" : @recipes[iconCount].image.url); %>
+                                    </div>
+                                    <%= image_tag (imgTag), class: "recipe-img" %>
+                                    <p><%= @recipes[iconCount].name %></p>
+                                </a>
+                            </div>
+                        </div>
+                    <% end %>
+                    <% columnCount += 1; %>
+                    <% iconCount += 1; %>
+                <% end %>
+                <% columnCount = 0; %>
+                <% rowCount += 1; %>
+            </div>
+        <% end %>
+    <% else %>
+        <div class="row">
+            <div class="column">
+                <div class="recipe-icon shadow">
+                    <a href="/recipes/new">
+                    <%= image_tag ("plus_icon.png"), class: "recipe-img" %>
+                    <p>New Recipe</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    <% end %>
+</div>
