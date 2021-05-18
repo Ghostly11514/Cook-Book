@@ -85,5 +85,5 @@ test:
 production:
   <<: *default
   database: cook_book_development
-  username: rubydev
+  username: <%= ENV['COOK_BOOK_DATABASE_USERNAME'] %>
   password: <%= ENV['COOK_BOOK_DATABASE_PASSWORD'] %>
